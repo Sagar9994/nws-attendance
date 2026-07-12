@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NWS Soft — Attendance Management System</title>
+  <meta name="description" content="Face recognition attendance system for NWS Soft Consulting Pvt Ltd">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="https://nwssoft.com/nws-globe-favicon-light.png" type="image/png">
+</head>
+<body>
+
+  <!-- ===================== LOGIN PAGE ===================== -->
+  <div id="login-page" class="login-page">
+    <div class="login-card">
+      <div class="login-logo">
+        <div class="login-logo-text">
+          <span class="nws">NWS</span><span class="soft">Soft</span>
+        </div>
+      </div>
+      <div class="login-title">Attendance Management System</div>
+      <div class="login-subtitle">Welcome Back</div>
+      <form id="login-form" autocomplete="off">
+        <div class="login-field">
+          <label for="login-username">Username</label>
+          <input type="text" id="login-username" placeholder="Enter username" required autofocus>
+        </div>
+        <div class="login-field">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" placeholder="Enter password" required>
+        </div>
+        <div id="login-error" class="login-error"></div>
+        <button type="submit" id="login-btn" class="login-btn">Sign In</button>
+      </form>
+      <div class="login-default-creds">Default: admin / admin123</div>
+    </div>
+  </div>
+
+  <!-- ===================== APP CONTAINER ===================== -->
+  <div id="app-container" class="app-container" style="display:none;">
+
+    <!-- Mobile Toggle -->
+    <button class="mobile-toggle" id="mobile-toggle">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-inner">
+          <span class="nws">NWS</span><span class="soft">Soft</span>
+        </div>
+        <div class="sidebar-logo-sub">Attendance System</div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Main</div>
+        <div class="nav-item active" data-page="dashboard">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="1" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="1" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="1" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="1" stroke-width="2"/></svg>
+          <span>Dashboard</span>
+        </div>
+        <div class="nav-item" data-page="attendance">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+          <span>Mark Attendance</span>
+        </div>
+
+        <div class="nav-section-label">Manage</div>
+        <div class="nav-item" data-page="register">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+          <span>Register Employee</span>
+        </div>
+        <div class="nav-item" data-page="logs">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+          <span>Attendance Log</span>
+        </div>
+        <div class="nav-item" data-page="reports">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          <span>Reports</span>
+        </div>
+
+        <div class="nav-section-label">System</div>
+        <div class="nav-item" data-page="settings">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span>Settings</span>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-admin">
+          <div class="admin-avatar">A</div>
+          <div class="admin-info">
+            <div class="admin-name">Admin</div>
+            <div class="admin-role">Administrator</div>
+          </div>
+        </div>
+        <button id="logout-btn" class="logout-btn">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+          Sign Out
+        </button>
+      </div>
+    </aside>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="main-content">
+      <!-- Header -->
+      <header class="main-header">
+        <h1 id="page-title" class="page-title">Dashboard</h1>
+        <div class="header-right">
+          <div id="model-status" class="model-status">
+            <span class="dot"></span>
+            <span class="model-status-text">Loading models...</span>
+          </div>
+          <div id="live-clock" class="live-clock">--</div>
+        </div>
+      </header>
+
+      <!-- Page Content -->
+      <div class="page-content">
+
+        <!-- ===== DASHBOARD ===== -->
+        <section id="page-dashboard" class="page-section active">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon blue">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              </div>
+              <div class="stat-info">
+                <div id="stat-total-employees" class="stat-number">0</div>
+                <div class="stat-label">Total Employees</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon green">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+              <div class="stat-info">
+                <div id="stat-present-today" class="stat-number">0</div>
+                <div class="stat-label">Present Today</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon red">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+              <div class="stat-info">
+                <div id="stat-absent-today" class="stat-number">0</div>
+                <div class="stat-label">Absent Today</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon amber">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+              <div class="stat-info">
+                <div id="stat-late-arrivals" class="stat-number">0</div>
+                <div class="stat-label">Late Arrivals</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="dashboard-grid">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Weekly Attendance</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-container">
+                  <canvas id="attendance-chart"></canvas>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Recent Activity</h3>
+              </div>
+              <div class="card-body">
+                <div id="recent-activity" class="activity-list">
+                  <div class="empty-state">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <h4>No Activity Yet</h4>
+                    <p>Attendance events will appear here</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== MARK ATTENDANCE ===== -->
+        <section id="page-attendance" class="page-section">
+          <div class="attendance-camera-section">
+            <div class="live-indicator" id="attendance-live-indicator" style="display:none;">
+              <span class="live-dot"></span> LIVE — Scanning for faces
+            </div>
+
+            <div class="video-wrapper" id="attendance-video-wrapper">
+              <video id="attendance-video" autoplay muted playsinline></video>
+              <canvas id="attendance-canvas"></canvas>
+              <div class="video-placeholder" id="attendance-placeholder">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                <p>Click "Start Camera" to begin</p>
+              </div>
+            </div>
+
+            <div class="camera-controls">
+              <button id="start-camera-btn" class="btn btn-primary">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                Start Camera
+              </button>
+              <button id="stop-camera-btn" class="btn btn-outline" disabled>
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"/></svg>
+                Stop Camera
+              </button>
+            </div>
+
+            <div id="attendance-status" class="attendance-status idle">
+              Start the camera to begin face recognition
+            </div>
+            <div id="attendance-result" class="attendance-result"></div>
+          </div>
+
+          <div class="card" style="margin-top:32px;">
+            <div class="card-header">
+              <h3 class="card-title">Today's Attendance</h3>
+            </div>
+            <div class="card-body">
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Employee</th>
+                      <th>ID</th>
+                      <th>Department</th>
+                      <th>Check-in</th>
+                      <th>Check-out</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="today-attendance-list">
+                    <tr><td colspan="6" class="empty-state" style="padding:40px;">No attendance records today</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== REGISTER EMPLOYEE ===== -->
+        <section id="page-register" class="page-section">
+          <div class="card" style="margin-bottom:24px;">
+            <div class="card-header">
+              <h3 class="card-title">Register New Employee</h3>
+            </div>
+            <div class="card-body">
+              <div class="register-layout">
+                <div class="register-video-section">
+                  <div class="video-wrapper" id="register-video-wrapper">
+                    <video id="register-video" autoplay muted playsinline></video>
+                    <canvas id="register-canvas"></canvas>
+                    <div class="video-placeholder" id="register-placeholder">
+                      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><circle cx="12" cy="13" r="3"/></svg>
+                      <p>Start camera to capture face</p>
+                    </div>
+                  </div>
+                  <div style="margin-top:16px; display:flex; gap:8px; justify-content:center;">
+                    <button id="register-start-camera-btn" class="btn btn-outline">
+                      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                      Start Camera
+                    </button>
+                    <button id="capture-face-btn" class="btn btn-success" disabled>
+                      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><circle cx="12" cy="13" r="3"/></svg>
+                      Capture Face
+                    </button>
+                  </div>
+                  <div id="face-capture-status" class="face-capture-status"></div>
+                </div>
+
+                <div class="register-form-section">
+                  <div class="form-group">
+                    <label for="register-name">Full Name *</label>
+                    <input type="text" id="register-name" placeholder="e.g. John Doe">
+                  </div>
+                  <div class="form-group">
+                    <label for="register-id">Employee ID *</label>
+                    <input type="text" id="register-id" placeholder="e.g. NWS001">
+                  </div>
+                  <div class="form-group">
+                    <label for="register-department">Department *</label>
+                    <select id="register-department">
+                      <option value="">Select Department</option>
+                      <option value="Engineering">Engineering</option>
+                      <option value="HR">HR</option>
+                      <option value="Finance">Finance</option>
+                      <option value="Marketing">Marketing</option>
+                      <option value="Operations">Operations</option>
+                      <option value="Management">Management</option>
+                      <option value="Sales">Sales</option>
+                      <option value="QA">QA</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" placeholder="e.g. john@nwssoft.com">
+                  </div>
+                  <div class="form-actions">
+                    <button id="register-btn" class="btn btn-primary" disabled>
+                      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+                      Register Employee
+                    </button>
+                    <button id="clear-register-btn" class="btn btn-outline">Clear</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Registered Employees</h3>
+              <span id="employee-count" style="font-size:13px; color:var(--text-muted);">0 employees</span>
+            </div>
+            <div class="card-body">
+              <div id="employee-list" class="employee-grid">
+                <div class="empty-state">
+                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                  <h4>No Employees Registered</h4>
+                  <p>Register your first employee using the form above</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== ATTENDANCE LOG ===== -->
+        <section id="page-logs" class="page-section">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Attendance Records</h3>
+            </div>
+            <div class="card-body">
+              <div class="filter-bar">
+                <input type="date" id="log-date-filter">
+                <input type="text" id="log-search" class="search-input" placeholder="Search by name or ID...">
+                <button id="export-csv-btn" class="btn btn-outline">
+                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                  Export CSV
+                </button>
+              </div>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Employee</th>
+                      <th>ID</th>
+                      <th>Department</th>
+                      <th>Date</th>
+                      <th>Check-in</th>
+                      <th>Check-out</th>
+                      <th>Duration</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="log-table-body">
+                    <tr><td colspan="8" class="empty-state" style="padding:40px;">No attendance records found</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div id="log-pagination" class="pagination"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== REPORTS ===== -->
+        <section id="page-reports" class="page-section">
+          <div class="card" style="margin-bottom:24px;">
+            <div class="card-header">
+              <h3 class="card-title">Generate Report</h3>
+            </div>
+            <div class="card-body">
+              <div class="filter-bar">
+                <div>
+                  <label style="font-size:12px;color:var(--text-muted);display:block;margin-bottom:4px;">From</label>
+                  <input type="date" id="report-date-from">
+                </div>
+                <div>
+                  <label style="font-size:12px;color:var(--text-muted);display:block;margin-bottom:4px;">To</label>
+                  <input type="date" id="report-date-to">
+                </div>
+                <select id="report-department-filter">
+                  <option value="">All Departments</option>
+                  <option value="Engineering">Engineering</option>
+                  <option value="HR">HR</option>
+                  <option value="Finance">Finance</option>
+                  <option value="Marketing">Marketing</option>
+                  <option value="Operations">Operations</option>
+                  <option value="Management">Management</option>
+                  <option value="Sales">Sales</option>
+                  <option value="QA">QA</option>
+                </select>
+                <button id="generate-report-btn" class="btn btn-primary">
+                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                  Generate Report
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div id="report-summary" class="report-summary-grid" style="display:none;">
+            <div class="report-summary-card">
+              <div id="report-attendance-rate" class="report-summary-value">0%</div>
+              <div class="report-summary-label">Attendance Rate</div>
+            </div>
+            <div class="report-summary-card">
+              <div id="report-avg-hours" class="report-summary-value">0h</div>
+              <div class="report-summary-label">Avg Working Hours</div>
+            </div>
+            <div class="report-summary-card">
+              <div id="report-on-time-rate" class="report-summary-value">0%</div>
+              <div class="report-summary-label">On-Time Rate</div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom:24px;">
+            <div class="card-header">
+              <h3 class="card-title">Attendance Trend</h3>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="report-chart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Employee Breakdown</h3>
+            </div>
+            <div class="card-body">
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Employee</th>
+                      <th>Department</th>
+                      <th>Days Present</th>
+                      <th>Days Late</th>
+                      <th>Avg Hours</th>
+                      <th>Attendance %</th>
+                    </tr>
+                  </thead>
+                  <tbody id="report-breakdown">
+                    <tr><td colspan="6" class="empty-state" style="padding:40px;">Generate a report to see breakdown</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== SETTINGS ===== -->
+        <section id="page-settings" class="page-section">
+          <div class="settings-grid">
+
+            <div class="settings-section">
+              <h3>
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                Change Password
+              </h3>
+              <div class="form-group">
+                <label for="current-password">Current Password</label>
+                <input type="password" id="current-password" placeholder="Enter current password">
+              </div>
+              <div class="form-group">
+                <label for="new-password">New Password</label>
+                <input type="password" id="new-password" placeholder="Enter new password">
+              </div>
+              <div class="form-group">
+                <label for="confirm-password">Confirm New Password</label>
+                <input type="password" id="confirm-password" placeholder="Confirm new password">
+              </div>
+              <button id="change-password-btn" class="btn btn-primary">Change Password</button>
+            </div>
+
+            <div class="settings-section">
+              <h3>
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Office Hours
+              </h3>
+              <div class="form-group">
+                <label for="office-start-time">Office Start Time</label>
+                <input type="time" id="office-start-time" value="09:00">
+              </div>
+              <div class="form-group">
+                <label for="office-end-time">Office End Time</label>
+                <input type="time" id="office-end-time" value="18:00">
+              </div>
+              <div class="form-group">
+                <label for="late-threshold">Late Threshold (minutes)</label>
+                <input type="number" id="late-threshold" value="15" min="0" max="60">
+              </div>
+              <button id="save-settings-btn" class="btn btn-primary">Save Settings</button>
+            </div>
+
+            <div class="settings-section">
+              <h3>
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                Data Backup &amp; Restore
+              </h3>
+              <p style="font-size:13px; color:var(--text-secondary); margin-bottom:16px;">
+                Export your data as a JSON file for backup. Save to Google Drive or commit to Git for cloud sync.
+              </p>
+              <div style="display:flex; flex-direction:column; gap:12px;">
+                <button id="backup-btn" class="btn btn-success" style="width:100%;">
+                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                  Export Backup (.json)
+                </button>
+                <button id="restore-btn" class="btn btn-outline" style="width:100%;">
+                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                  Import Backup (.json)
+                </button>
+                <input type="file" id="restore-file-input" accept=".json" style="display:none;">
+                <button id="clear-data-btn" class="btn btn-danger" style="width:100%;">
+                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                  Clear All Data
+                </button>
+              </div>
+              <div class="settings-info">
+                <strong>💡 Google Drive / Git Sync:</strong><br>
+                1. Click "Export Backup" to download a .json file<br>
+                2. Save the file to your Google Drive folder or Git repo<br>
+                3. To restore, use "Import Backup" with the .json file
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TOAST CONTAINER ===== -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- ===== LOADING OVERLAY ===== -->
+  <div id="loading-overlay" class="loading-overlay hidden">
+    <div class="loading-spinner"></div>
+    <div id="loading-text" class="loading-text">Loading face detection models...</div>
+  </div>
+
+  <!-- ===== CONFIRM DIALOG ===== -->
+  <div id="confirm-overlay" class="confirm-overlay hidden">
+    <div class="confirm-dialog">
+      <h3 id="confirm-title">Are you sure?</h3>
+      <p id="confirm-message">This action cannot be undone.</p>
+      <div class="confirm-actions">
+        <button id="confirm-cancel-btn" class="btn btn-outline">Cancel</button>
+        <button id="confirm-ok-btn" class="btn btn-danger">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SCRIPTS ===== -->
+  <script src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1/dist/face-api.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/camera.js"></script>
+  <script src="js/faceRecognition.js"></script>
+  <script src="js/attendance.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
