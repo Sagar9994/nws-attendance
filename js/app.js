@@ -515,7 +515,7 @@ window.App = {
     setVal('late-threshold', settings.lateThreshold);
   },
 
-  handleChangePassword() {
+  async handleChangePassword() {
     const current = document.getElementById('current-password').value;
     const newPw = document.getElementById('new-password').value;
     const confirm = document.getElementById('confirm-password').value;
@@ -533,7 +533,10 @@ window.App = {
       return;
     }
 
-    const result = StorageManager.changePassword(current, newPw);
+    this.showLoading('Updating password...');
+    const result = await StorageManager.changePassword(current, newPw);
+    this.hideLoading();
+
     if (result.success) {
       this.showToast(result.message, 'success');
       document.getElementById('current-password').value = '';
