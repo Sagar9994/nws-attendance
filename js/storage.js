@@ -13,7 +13,7 @@ window.StorageManager = {
 
   // --- LOCAL SYNCHRONOUS CACHE ---
   cache: {
-    admin: { username: 'admin', passwordHash: 'djb2_6kefv7' }, // admin123
+    admin: { username: 'admin', passwordHash: 'djb2_6quw9w' }, // admin123
     employees: [],
     attendance: [],
     settings: {
