@@ -11,7 +11,14 @@ window.App = {
 
   /* ---------- Initialization ---------- */
   async init() {
-    // Ensure default admin exists
+    this.showLoading('Syncing database...');
+    
+    // Connect to Supabase/localStorage and populate local cache
+    await StorageManager.init();
+    
+    this.hideLoading();
+
+    // Ensure default admin exists in the cache
     StorageManager.getAdmin();
 
     // Set up all event listeners
@@ -25,6 +32,21 @@ window.App = {
 
     // Start clock
     DashboardManager.startClock();
+
+    // Periodically fetch database updates every 30 seconds
+    setInterval(async () => {
+      if (StorageManager.isCloudActive && this.isLoggedIn) {
+        await StorageManager.syncFromCloud();
+        FaceRecognition.buildFaceMatcher();
+        if (this.currentPage === 'dashboard') {
+          DashboardManager.refreshAll();
+        } else if (this.currentPage === 'register') {
+          DashboardManager.renderEmployeeList();
+        } else if (this.currentPage === 'logs') {
+          this._filterLogs();
+        }
+      }
+    }, 30000);
   },
 
   /* ---------- Model Loading ---------- */
