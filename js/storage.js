@@ -5,9 +5,8 @@
 
 window.StorageManager = {
   // --- SUPABASE CONFIGURATION ---
-  // You will replace these with your credentials
-  SUPABASE_URL: 'YOUR_SUPABASE_URL',
-  SUPABASE_ANON_KEY: 'YOUR_SUPABASE_ANON_KEY',
+  SUPABASE_URL: 'https://pftrrflwnaydkaekctvp.supabase.co',
+  SUPABASE_ANON_KEY: 'sb_publishable_Urz1liUw2iiy2dRYFfwMHQ_LBhKGdlJ',
   
   supabase: null,
   isCloudActive: false,
